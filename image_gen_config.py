@@ -1,7 +1,8 @@
 from pathlib import Path
 import logging, os, sys
+import platform
 
-SRSDK_IMAGE_CENERATOR_VER = "5.0.12"
+SRSDK_IMAGE_CENERATOR_VER = "5.0.13"
 
 is_B0_chip      = False
 
@@ -18,7 +19,7 @@ def get_output_folder_path():
     Path(out_path).mkdir(parents=True, exist_ok=True)
     return out_path.resolve()
 
-def setup_logger():     
+def setup_logger():
     # Create a logger
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
@@ -27,7 +28,7 @@ def setup_logger():
     logger_file_path = ROOT_DIRECTORY.joinpath('Log').joinpath('Image_generator_Logger.txt')
     if os.path.exists(logger_file_path):
         os.remove(logger_file_path)
-    check_path(logger_file_path)    
+    check_path(logger_file_path)
     file_handler = logging.FileHandler(logger_file_path)
     file_handler.setLevel(logging.DEBUG)
 
@@ -40,8 +41,8 @@ def setup_logger():
     # logger.addHandler(console_handler)
     logger.addHandler(file_handler)
 
-    return logger, file_handler  
-   
+    return logger, file_handler
+
 def close_logger(logger, handler):
     # Remove the handler from the logger
     logger.removeHandler(handler)
@@ -76,12 +77,12 @@ def get_output_folder_path_host_components(chip_type):
     Path(out_path).mkdir(parents=True, exist_ok=True)
     return out_path.resolve()
 
-def check_path(output_path):    
+def check_path(output_path):
     # Check if the directory of the output path exists, if not, create it
     output_path = Path(output_path)
     if not output_path.parent.exists():
         output_path.parent.mkdir(parents=True, exist_ok=True)
-   
+
 ROOT_DIRECTORY                              =  Path.cwd()
 JUMP_ADDR_PREFIX                            = '_run_image.bin'
 
@@ -99,7 +100,7 @@ SDK_SUB_IMAGES_AXI_FOLDER                   = "SDK_Sub_Images_AXI_Enc"
 SDK_SUB_IMAGES_BCM_FOLDER                   = "SDK_Sub_Images_BCM_Enc"
 NVM_SUB_IMAGES_FOLDER                       = "NVM_Sub_Images"
 
-BIN_OUTPUT_FOLDER_PATH_SUB_IMAGES           = get_output_folder_path_sub_images() 
+BIN_OUTPUT_FOLDER_PATH_SUB_IMAGES           = get_output_folder_path_sub_images()
 BIN_OUTPUT_FOLDER_PATH_SUB_IMAGES_APBL      = BIN_OUTPUT_FOLDER_PATH_SUB_IMAGES.joinpath(APBL_SUB_IMAGES_FOLDER)
 BIN_OUTPUT_FOLDER_PATH_SUB_IMAGES_SDK_AXI   = BIN_OUTPUT_FOLDER_PATH_SUB_IMAGES.joinpath(SDK_SUB_IMAGES_AXI_FOLDER)
 BIN_OUTPUT_FOLDER_PATH_SUB_IMAGES_SDK_BCM   = BIN_OUTPUT_FOLDER_PATH_SUB_IMAGES.joinpath(SDK_SUB_IMAGES_BCM_FOLDER)
@@ -109,14 +110,14 @@ BIN_OUTPUT_FOLDER_PATH_SUB_IMAGES_NVM       = BIN_OUTPUT_FOLDER_PATH_SUB_IMAGES.
 IMAGE_LISTS_JSON_PATH                       = BIN_OUTPUT_FOLDER_PATH_SUB_IMAGES.joinpath('imglst.json')
 log_file, log_handler                       = setup_logger()
 
-IMAGES_PARAMETERS                           = Path.cwd().joinpath('Input_Config').joinpath('Images_Parameters.json') 
+IMAGES_PARAMETERS                           = Path.cwd().joinpath('Input_Config').joinpath('Images_Parameters.json')
 
 EXTRAS_BIN_PATH                             = Path.cwd().joinpath('in_extras.bin')
 
-if is_windows:
-    GENX_EXE_PATH                           = Path.cwd().joinpath('genx_main.exe')
-else:    
-    GENX_EXE_PATH                           = Path.cwd().joinpath('genx_main')
+system  = platform.system().lower()     # "windows", "linux", "darwin"
+machine = platform.machine().lower()    # "x86_64", "amd64", "arm64", "aarch64"
+
+GENX_EXE_PATH = Path.cwd().joinpath("genx/main.py")
 
 CONFIG_NVM_DATA_PATH                    = Path.cwd().joinpath('Input_Config').joinpath('NVM_data.json')
 CONFIG_FW_UPDATE_DATA_PATH              = Path.cwd().joinpath('Input_Config').joinpath('Fw_Update_Parameters.json')
@@ -227,7 +228,7 @@ BYTES_12_31                      = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x
 #APBL Defines
 OP_CODE_SEC_IMG_IN_PLACE_0x12       = [0x12]
 OP_CODE_SEC_IMG_NOT_IN_PLACE_0x13   = [0x13]
-APBL_IMG_TYPE_FOR_BOOT_LOADER       = [0x01, 0x00, 0x00, 0x00]    
+APBL_IMG_TYPE_FOR_BOOT_LOADER       = [0x01, 0x00, 0x00, 0x00]
 
 SECURITY_HEADER                 = (int)(96) #size in bytes
 SECURED_SIGNATURE_SIZE          = (int)(512) #size in bytes
@@ -285,11 +286,12 @@ fw_b_for_flash                  = ""
 is_sdk_secured                  = False
 is_model_secured                = False
 last_image                      = 'm55'
+single_slot                     = False
 
 #------------------- Images Definitions -------------------
-ATTR_DICT_KEY_LIST = [  "Header_Magic_Num", 
+ATTR_DICT_KEY_LIST = [  "Header_Magic_Num",
                         "Pll_Off_Max_QSPI_Frequency_in_MHz",
-                        "Pll_On_Max_QSPI_Frequency_in_MHz",         
+                        "Pll_On_Max_QSPI_Frequency_in_MHz",
                         "Support_4_bit",
                         "QuadRead_Num_Dummy_Cycles",
                         "RD_SR1_CMD",
@@ -298,7 +300,7 @@ ATTR_DICT_KEY_LIST = [  "Header_Magic_Num",
                         "SR_QE_BIT",
                         "Enable_QE_CMD",
                         "Disable_QE_CMD",
-                        "Pll_Off_PHY_Parameters_valid",       
+                        "Pll_Off_PHY_Parameters_valid",
                         "Pll_Off_dq_timing_reg_val",
                         "Pll_Off_dqs_timing_reg_val",
                         "Pll_Off_gate_lpbk_ctrl_reg_val",
@@ -317,22 +319,22 @@ ATTR_DICT_KEY_LIST = [  "Header_Magic_Num",
                         "Delay_after_switch_to_DIRECT_MODE",
                         "Reserved",
                         "K0_K1_SPK_A_offset",
-                        "K0_K1_SPK_A_size_APBL_A_size",  
+                        "K0_K1_SPK_A_size_APBL_A_size",
                         "K0_K1_SPK_B_offset",
-                        "K0_K1_SPK_B_size_APBL_B_size",  
+                        "K0_K1_SPK_B_size_APBL_B_size",
                         "APBL_A_Offset",
-                        "APBL_A_size",  
+                        "APBL_A_size",
                         "APBL_B_Offset",
-                        "APBL_B_size", 
-                        "FW_NV_A_offset",     
+                        "APBL_B_size",
+                        "FW_NV_A_offset",
                         "FW_NV_B_offset"]
 
 #--------------------------------------------------------
 #------------------- NVM Definitions -------------------
-NVM_DICT_KEY_LIST = [   "magic_number", 
+NVM_DICT_KEY_LIST = [   "magic_number",
                         "fw_nv_size",
                         "apbl_slot",
-                        "image_offset_SDK_image_A_offset",         
+                        "image_offset_SDK_image_A_offset",
                         "image_offset_SDK_image_B_offset",
                         "image_offset_App_Image_A_offset",
                         "image_offset_App_image_B_offset",
@@ -341,46 +343,46 @@ NVM_DICT_KEY_LIST = [   "magic_number",
                         "image_offset_reserved_1",
                         "image_offset_reserved_2 ",
                         "security_num_of_defined_sections",
-                        "security_num_section_1_control",       
+                        "security_num_section_1_control",
                         "security_num_section_1_key",
                         "security_num_section_1_start_offset",
                         "security_num_section_1_end_offset",
                         "security_num_section_1_crypto_offset",
-                        "security_num_section_2_control",       
+                        "security_num_section_2_control",
                         "security_num_section_2_key",
                         "security_num_section_2_start_offset",
                         "security_num_section_2_end_offset",
                         "security_num_section_2_crypto_offset",
-                        "security_num_section_3_control",       
+                        "security_num_section_3_control",
                         "security_num_section_3_key",
                         "security_num_section_3_start_offset",
                         "security_num_section_3_end_offset",
                         "security_num_section_3_crypto_offset",
-                        "security_num_section_4_control",       
+                        "security_num_section_4_control",
                         "security_num_section_4_key",
                         "security_num_section_4_start_offset",
                         "security_num_section_4_end_offset",
                         "security_num_section_4_crypto_offset",
-                        "security_num_section_5_control",       
+                        "security_num_section_5_control",
                         "security_num_section_5_key",
                         "security_num_section_5_start_offset",
                         "security_num_section_5_end_offset",
                         "security_num_section_5_crypto_offset",
-                        "security_num_section_6_control",       
+                        "security_num_section_6_control",
                         "security_num_section_6_key",
                         "security_num_section_6_start_offset",
                         "security_num_section_6_end_offset",
                         "security_num_section_6_crypto_offset",
-                        "security_num_section_7_control",       
+                        "security_num_section_7_control",
                         "security_num_section_7_key",
                         "security_num_section_7_start_offset",
                         "security_num_section_7_end_offset",
                         "security_num_section_7_crypto_offset",
-                        "security_num_section_8_control",       
+                        "security_num_section_8_control",
                         "security_num_section_8_key",
                         "security_num_section_8_start_offset",
                         "security_num_section_8_end_offset",
-                        "security_num_section_8_crypto_offset",        
+                        "security_num_section_8_crypto_offset",
                         "sw_update_state",
                         "sw_update_reset_cause",
                         "sw_update_failure_cause",
@@ -444,15 +446,15 @@ NVM_DICT_KEY_LIST = [   "magic_number",
                         "sw_update_st_fw_update_component_4_st_image_slot_0_image_is_functional",
                         "sw_update_st_fw_update_component_4_st_image_slot_1_slot_address",
                         "sw_update_st_fw_update_component_4_st_image_slot_1_image_is_bootable",
-                        "sw_update_st_fw_update_component_4_st_image_slot_1_image_is_functional",        
+                        "sw_update_st_fw_update_component_4_st_image_slot_1_image_is_functional",
                         "tracking_wd_reset",
                         "tracking_oom_reset",
                         "tracking_fault_reset",
-                        "tracking_os_panic",  
+                        "tracking_os_panic",
                         "tracking_program_reset",
-                        "tracking_fw_update_failure",  
+                        "tracking_fw_update_failure",
                         "tracking_app_sw_reset",
-                        "tracking_fw_update_reset_cause",  
+                        "tracking_fw_update_reset_cause",
                         "tracking_reserved_1",
                         "tracking_reserved_2"]
 #--------------------------------------------------------
