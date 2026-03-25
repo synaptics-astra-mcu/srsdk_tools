@@ -159,17 +159,9 @@ def main(params:Parameters):
         create_all_sdk_files()
 
         if params.m55_image:
-            import hashlib
-            with open(params.m55_image, 'rb') as f:
-                m55_md5 = hashlib.md5(f.read()).hexdigest()
-            print(f'[rs.log]M55 Image MD5: {m55_md5}')
-            image_gen_config.log_file.info(f'M55 Image MD5: {m55_md5}')
-            
             if image_gen_config.is_host_image:
-                print("[rs.log][m55_host]m55_image=", params.m55_image);
                 b0_generate_fw_images(params.m55_image, 'm55', 'host', 0)
             if image_gen_config.is_flash_image:
-                print("[rs.log][m55_flash]m55_image=", params.m55_image);
                 b0_generate_fw_images(params.m55_image, 'm55', 'flash', 0)
 
         if params.m4_image:
@@ -329,8 +321,6 @@ if __name__ == '__main__':
                         m4_image = args.m4_image, npu_c_image = args.npu_c_image, model = args.model,
                         flash_type = args.flash_type, flash_freq = args.flash_freq, Q4 = args.flash_support_4_bit,
                         json_attr = args.json_attr, parse_attr = args.parse_attr)
-    
-    print(f'[rs.log]M55 Image: {args.m55_image}')
     
     params.check_input_arguments()
 
