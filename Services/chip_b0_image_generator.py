@@ -395,12 +395,12 @@ def b0_generate_fw_images(elf_file_name, fw_type, host_type, m55_length):
                     info_dict = eval(repr(image_gen_config.dict_m4_info_flash))
 
             if 'host' in host_type:
-                    print(f" Add FW {fw_type}: {elf_file_name} to SDK Image File: {image_gen_config.output_sdk_host}")
-                    image_gen_config.log_file.info(f" Add FW {fw_type}: {elf_file_name} to SDK Image File: {image_gen_config.output_sdk_host}")
+                    print(f" 1_Add FW {fw_type}: {elf_file_name} to SDK Image File: {image_gen_config.output_sdk_host}")
+                    image_gen_config.log_file.info(f" 1_Add FW {fw_type}: {elf_file_name} to SDK Image File: {image_gen_config.output_sdk_host}")
                     output_secure_bin = open(image_gen_config.HOST_TEMP_BIN_FILE, "wb")
             else:
-                print(f" Add FW {fw_type}: {elf_file_name} to SDK Image File: {image_gen_config.output_sdk_flash}")
-                image_gen_config.log_file.info(f" Add FW {fw_type}: {elf_file_name} to SDK Image File: {image_gen_config.output_sdk_flash}")
+                print(f" 2_Add FW {fw_type}: {elf_file_name} to SDK Image File: {image_gen_config.output_sdk_flash}")
+                image_gen_config.log_file.info(f" 2_Add FW {fw_type}: {elf_file_name} to SDK Image File: {image_gen_config.output_sdk_flash}")
                 if int(info_dict['Encryption_Type']) and image_gen_config.is_sdk_secured:
                     output_secure_bin = open(image_gen_config.OUTPUT_TEMP_BIN_FILE, "wb")
                     axi_crypto_output_secure_bin = open(image_gen_config.FLASH_TEMP_BIN_FILE, "wb")
@@ -519,6 +519,7 @@ def b0_generate_fw_images(elf_file_name, fw_type, host_type, m55_length):
                             else:
                                 im_addr = im_addr + m55_offset + image_gen_config.BOOT_COMMAND_SIZE_BYTES + gnex_file_bin_length[counter]
                         else:
+                            print("[rs.log]m55_length=", m55_length);
                             if counter == 0:
                                 im_addr = m55_offset + m55_length + gnex_file_bin_length[counter]
                             else:

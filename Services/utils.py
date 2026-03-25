@@ -315,11 +315,6 @@ def convert_json_2dict_and_copy2other_dict(json_path):
         image_gen_config.dict_apbl_info           = eval(repr(info_data["APBL_Info"]))
         image_gen_config.dict_m55_info_host       = eval(repr(info_data["M55_Info_Host"]))
         image_gen_config.dict_m55_info_flash      = eval(repr(info_data["M55_Info_Flash"]))
-        image_gen_config.dict_m4_info_host        = eval(repr(info_data["M4_Info_Host"]))
-        image_gen_config.dict_m4_info_flash       = eval(repr(info_data["M4_Info_Flash"]))
-        image_gen_config.dict_npu_c_info_host     = eval(repr(info_data["NPU_C_Info_Host"]))
-        image_gen_config.dict_npu_c_info_flash    = eval(repr(info_data["NPU_C_Info_Flash"]))
-        image_gen_config.dict_model_info_flash    = eval(repr(info_data["Model_Info_Flash"]))
     elif str(image_gen_config.CONFIG_PARAMS_PATH) in str(json_path):
         image_gen_config.addr_configs             = eval(repr(info_data["ADDR_CONFIGS"]))
         image_gen_config.memory_regions           = eval(repr(info_data["MEMORY_REGIONS"]))
