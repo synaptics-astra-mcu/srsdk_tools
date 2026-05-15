@@ -71,7 +71,7 @@ class Parameters:
                 image_gen_config.log_file.info(f' M55 FW File: {params.m55_image}')
 
             if params.m4_image:
-                if not params.m4_image.lower().endswith('.axf'):
+                if not params.m4_image.lower().endswith('.axf') and not params.m4_image.lower().endswith('.elf'):
                     print_err('Wrong File extention', file_name=params.m4_image, extention='.axf')
                 image_gen_config.log_file.info(f' M4 FW File: {params.m4_image}')
 
