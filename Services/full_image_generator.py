@@ -4,7 +4,7 @@ import image_gen_config
 from Services.utils import *
 
 # create full image host or flash
-def create_images(flash_type, flash_freq, m55_image, full_image_type):
+def create_images(flash_type, flash_freq, m4_image, m55_image, full_image_type, mcuboot):
     start_time = time.time()
     bin_data_full_flash_image = bytes()
     try:
@@ -86,8 +86,15 @@ def create_images(flash_type, flash_freq, m55_image, full_image_type):
                     # 5) SDK A at SDK A offset from NVM (image_offset_SDK_image_A_offset)
                     sdk_a_off = int(image_gen_config.dict_nvm_data["image_offset_SDK_image_A_offset"], 16)
                     bin_data_full_flash_image = pad_to(bin_data_full_flash_image, sdk_a_off)
-                    if image_gen_config.output_sdk_flash:
+                    if m55_image and image_gen_config.output_sdk_flash:
                         bin_data_full_flash_image += read_file_to_array(image_gen_config.output_sdk_flash)
+
+                    if m4_image and mcuboot:
+                        # M4 A at APP A offset
+                        m4_a_off = int(image_gen_config.dict_nvm_data["image_offset_App_image_A_offset"], 16)
+                        bin_data_full_flash_image = pad_to(bin_data_full_flash_image, m4_a_off)
+                        if image_gen_config.output_m4_flash:
+                            bin_data_full_flash_image += read_file_to_array(image_gen_config.output_m4_flash)
 
                     # Finish: write the full image
                     with open(image_gen_config.output_full_flash_file, 'wb+') as f:
@@ -151,6 +158,21 @@ def create_images(flash_type, flash_freq, m55_image, full_image_type):
                         bin_data_full_flash_image = pad_to(bin_data_full_flash_image, sdk_b_off)
                         if image_gen_config.output_sdk_flash:
                             bin_data_full_flash_image += read_file_to_array(image_gen_config.output_sdk_flash)
+
+                    if m4_image and mcuboot:
+                        # M4 A at NVM APP A offset
+                        m4_a_off = int(image_gen_config.dict_nvm_data["image_offset_App_image_A_offset"], 16)
+                        bin_data_full_flash_image = pad_to(bin_data_full_flash_image, m4_a_off)
+                        if image_gen_config.output_m4_flash:
+                            bin_data_full_flash_image += read_file_to_array(image_gen_config.output_m4_flash)
+
+                        # M4 B at NVM APP B offset (skip if FFFFFFFF)
+                        m4_b_hex = image_gen_config.dict_nvm_data["image_offset_App_image_B_offset"]
+                        m4_b_off = int(m4_b_hex, 16)
+                        if m4_b_off != 0xFFFFFFFF:
+                            bin_data_full_flash_image = pad_to(bin_data_full_flash_image, m4_b_off)
+                            if image_gen_config.output_m4_flash:
+                                bin_data_full_flash_image += read_file_to_array(image_gen_config.output_m4_flash)
 
                     with open(image_gen_config.output_full_flash_file, 'wb+') as file:
                         file.write(bin_data_full_flash_image)

@@ -8,6 +8,7 @@ is_B0_chip      = False
 
 is_flash_image  = False
 is_host_image   = False
+mcuboot         = False
 
 chip_type       = ""
 total_run_time  = 0

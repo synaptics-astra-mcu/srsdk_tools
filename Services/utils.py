@@ -624,6 +624,8 @@ def create_all_sdk_files():
                                                                             str(image_gen_config.GLOBAL_COUNTER_BCM) + "_SDK_host_image_secured.bin")
         image_gen_config.output_sdk_flash = os.path.join(image_gen_config.BIN_OUTPUT_FOLDER_PATH_COMPONENT_FLASH,
                                                                             str(image_gen_config.GLOBAL_COUNTER_AXI) + "_SDK_flash_image_secured.bin")
+        image_gen_config.output_m4_flash = os.path.join(image_gen_config.BIN_OUTPUT_FOLDER_PATH_COMPONENT_FLASH,
+                                                                            str(image_gen_config.GLOBAL_COUNTER_AXI) + "_M4_flash_image_secured.bin")
     else:
         image_gen_config.output_sdk_host = os.path.join(image_gen_config.BIN_OUTPUT_FOLDER_PATH_COMPONENT_HOST,
                                                                             str(image_gen_config.GLOBAL_COUNTER_BCM) + "_SDK_host_image.bin")
@@ -634,6 +636,8 @@ def create_all_sdk_files():
         os.remove(image_gen_config.output_sdk_host)
     if os.path.exists(image_gen_config.output_sdk_flash):
         os.remove(image_gen_config.output_sdk_flash)
+    if os.path.exists(image_gen_config.output_m4_flash):
+        os.remove(image_gen_config.output_m4_flash)
     image_gen_config.check_path(image_gen_config.output_sdk_host)
     image_gen_config.check_path(image_gen_config.output_sdk_flash)
 

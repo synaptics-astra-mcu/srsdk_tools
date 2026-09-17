@@ -11,7 +11,7 @@ from Services.fw_update import *
 
 class Parameters:
     def __init__(self, spk_image, apbl_image, m55_image, m4_image, npu_c_image, model,
-                        flash_type, flash_freq, Q4, json_attr, parse_attr):
+                        flash_type, flash_freq, Q4, json_attr, parse_attr, mcuboot):
         self.spk_image          = spk_image
         self.apbl_image         = apbl_image
         self.m55_image          = m55_image
@@ -21,6 +21,7 @@ class Parameters:
         self.flash_type         = flash_type
         self.flash_freq         = flash_freq
         self.Q4                 = Q4
+        self.mcuboot            = mcuboot
 
         # Flash_attributes.json
         self.json_attr          = json_attr
@@ -65,14 +66,21 @@ class Parameters:
                 image_gen_config.log_file.info(f' APBL File: {params.apbl_image}')
 
             if params.m55_image:
-                if not params.m55_image.lower().endswith('.axf') and not params.m55_image.lower().endswith('.elf'):
-                    print_err(params.m55_image, '.axf')
-                    print_err(params.m55_image, '.elf')
+                allowed_exts = ['.axf', '.elf']
+                if params.mcuboot:
+                    allowed_exts += ['.bin']
+                if not any(params.m55_image.lower().endswith(ext) for ext in allowed_exts):
+                    for ext in allowed_exts:
+                        print_err(params.m55_image, ext)
                 image_gen_config.log_file.info(f' M55 FW File: {params.m55_image}')
 
             if params.m4_image:
-                if not params.m4_image.lower().endswith('.axf') and not params.m4_image.lower().endswith('.elf'):
-                    print_err('Wrong File extention', file_name=params.m4_image, extention='.axf')
+                allowed_exts = ['.axf', '.elf']
+                if params.mcuboot:
+                    allowed_exts += ['.bin']
+                if not any(params.m4_image.lower().endswith(ext) for ext in allowed_exts):
+                    for ext in allowed_exts:
+                        print_err(params.m4_image, ext)
                 image_gen_config.log_file.info(f' M4 FW File: {params.m4_image}')
 
             if params.npu_c_image:
@@ -167,8 +175,10 @@ def main(params:Parameters):
         if params.m4_image:
             if image_gen_config.is_host_image:
                 b0_generate_fw_images(params.m4_image, 'm4', 'host', 0)
-            if image_gen_config.is_flash_image:
+            if image_gen_config.is_flash_image and not params.mcuboot:
                 b0_generate_fw_images(params.m4_image, 'm4', 'flash', os.path.getsize(image_gen_config.output_sdk_flash))
+            if image_gen_config.is_flash_image and params.mcuboot:
+                b0_generate_fw_images(params.m4_image, 'm4', 'flash', 0)
 
         if params.npu_c_image:
             if image_gen_config.is_host_image:
@@ -186,11 +196,11 @@ def main(params:Parameters):
 
         if  params.spk_image and params.apbl_image and params.m55_image:
             if image_gen_config.is_host_image:
-                create_images(params.flash_type, params.flash_freq, params.m55_image, 'host')
+                create_images(params.flash_type, params.flash_freq, params.m4_image, params.m55_image, 'host', params.mcuboot)
             if image_gen_config.is_flash_image:
                 # create attribute files from json
                 create_attribute_parameters(params.flash_type, params.flash_freq, params.Q4)
-                create_images(params.flash_type, params.flash_freq,params.m55_image, 'flash')
+                create_images(params.flash_type, params.flash_freq, params.m4_image, params.m55_image, 'flash', params.mcuboot)
                 #FW Update
                 if image_gen_config.single_slot == False:
                     create_fw_update_images()
@@ -264,6 +274,7 @@ if __name__ == '__main__':
     parser.add_argument('-m4_image', '--m4_image', type=str, help='Input M4 Image file name', default= "")
     parser.add_argument('-npu_c_image', '--npu_c_image', type=str, help='Input NPU_C Image file name', default= "")
     parser.add_argument('-model', '--model', type=str, help='Input Model Image file name', default= "")
+    parser.add_argument('-mcuboot', help='The M4/55 images are MCUBoot-signed binaries', action='store_true')
     parser.add_argument('-single_slot', help='Remove B images (SPK/APBL/NVM/SDK) and only place A; SDK A is aligned to 32KB', action='store_true')
     parser.add_argument('-flash_type', '--flash_type', type=str, choices=['GD25LE128', 'W25Q128', 'MX25U128'], help='Flash Type', default='')
     # parser.add_argument('-flash_size', '--flash_size', type=str, choices=['1M', '2M', '4M', '8M', '16M', '32M', '64M', '128M'], help='Flash Type', default='')
@@ -317,10 +328,12 @@ if __name__ == '__main__':
     print(f' Flash Full Image Required = {image_gen_config.is_flash_image}, Host Full Image required = {image_gen_config.is_host_image}')
     image_gen_config.log_file.info(f' Flash Full Image Required = {image_gen_config.is_flash_image}, Host Full Image required = {image_gen_config.is_host_image}')
 
+    image_gen_config.mcuboot = args.mcuboot
+
     params = Parameters(spk_image = args.spk_input_file_name, apbl_image = args.apbl_input_file_name, m55_image = args.m55_image,
                         m4_image = args.m4_image, npu_c_image = args.npu_c_image, model = args.model,
                         flash_type = args.flash_type, flash_freq = args.flash_freq, Q4 = args.flash_support_4_bit,
-                        json_attr = args.json_attr, parse_attr = args.parse_attr)
+                        json_attr = args.json_attr, parse_attr = args.parse_attr, mcuboot = args.mcuboot)
     
     params.check_input_arguments()
 
