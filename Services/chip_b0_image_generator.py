@@ -379,6 +379,36 @@ def b0_generate_fw_images(elf_file_name, fw_type, host_type, m55_length):
         # Get the absolute path
         absolute_path = os.path.abspath(elf_file_name)
         if os.path.exists(absolute_path):
+            if image_gen_config.mcuboot and 'm55' in fw_type:
+                raw_data = read_file_to_array(elf_file_name)
+                if 'host' in host_type:
+                    with open(image_gen_config.output_sdk_host, 'ab+') as file:
+                        file.write(raw_data)
+                else:
+                    with open(image_gen_config.output_sdk_flash, 'ab+') as file:
+                        file.write(raw_data)
+                if 'host' in host_type:
+                    image_gen_config.host_sub_image_counter += 1
+                else:
+                    image_gen_config.flash_sub_image_counter += 1
+                return
+
+            if image_gen_config.mcuboot and 'm4' in fw_type:
+                raw_data = read_file_to_array(elf_file_name)
+                print(f" Read M4 file {elf_file_name}")
+                if 'host' in host_type:
+                    with open(image_gen_config.output_sdk_host, 'ab+') as file:
+                        file.write(raw_data)
+                else:
+                    with open(image_gen_config.output_m4_flash, 'ab+') as file:
+                        file.write(raw_data)
+                    print(f" Wrote to {image_gen_config.output_m4_flash}")
+                if 'host' in host_type:
+                    image_gen_config.host_sub_image_counter += 1
+                else:
+                    image_gen_config.flash_sub_image_counter += 1
+                return
+
             section_infos = get_sections(elf_file_name)
             # file name with extension
             file_name = os.path.basename(elf_file_name)
