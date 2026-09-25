@@ -1,0 +1,100 @@
+{
+    "APBL_Info":
+    {
+        "Image_Type":                  "APBL", 
+        "SegID_Value":                     "0",    
+        "Version_Value":                   "0",       
+        "Production_Image_Flag_Value":     "0",
+        "INITSVTOR_Value":                 "33E80000",
+        "Destination_Address_Value":       "33E80000",
+        "SCGK_path":                        "./GenX_Input_Files/key/ASIC/SCGK_APBL.bin",
+        "IV_path":                          "./GenX_Input_Files/parameters/iv_apbl.bin", 
+        "Priv_Key_Path":                    "./GenX_Input_Files/key/ASIC/K1_SPE_A.rsa.priv.pem"    
+    },
+    "M55_Info_Host":
+    {
+        "Image_Type":                  "M55", 
+        "SegID_Value":                     "0",    
+        "Version_Value":                   "0",       
+        "Production_Image_Flag_Value":     "0",       
+        "Encryption_Type":                  "0",
+        "SCGK_path":                        "./GenX_Input_Files/key/ASIC/SCGK_TF_M.bin",
+        "IV_path":                          "./GenX_Input_Files/parameters/iv_tf_m.bin", 
+        "Priv_Key_Path":                    "./GenX_Input_Files/key/ASIC/K1_SPE_B.rsa.priv.pem"
+    },
+    "M55_Info_Flash":
+    {
+        "Image_Type":                  "M55", 
+        "SegID_Value":                     "0",    
+        "Version_Value":                   "0",       
+        "Production_Image_Flag_Value":     "0",       
+        "Encryption_Type":                  "1",
+        "SCGK_path":                        "./GenX_Input_Files/key/ASIC/SCGK_TF_M.bin",
+        "IV_path":                          "./GenX_Input_Files/parameters/iv_tf_m.bin", 
+        "Priv_Key_Path":                    "./GenX_Input_Files/key/ASIC/K1_SPE_B.rsa.priv.pem",        
+        "AXICrypto_Key_Path":               "./GenX_Input_Files/axi_crypto/SCGK_AXI_KEY0.bin",
+        "AXICrypto_Nonce_Path":             "./GenX_Input_Files/axi_crypto/nonce0.bin"    
+    },
+    "M4_Info_Host":
+    {
+        "Image_Type":                  "M4", 
+        "SegID_Value":                     "0",    
+        "Version_Value":                   "0",       
+        "Production_Image_Flag_Value":     "0",       
+        "Encryption_Type":                 "0",
+        "SCGK_path":                        "./GenX_Input_Files/key/ASIC/SCGK_M4_FW.bin",
+        "IV_path":                          "./GenX_Input_Files/parameters/iv_m4_sw.bin", 
+        "Priv_Key_Path":                    "./GenX_Input_Files/key/ASIC/K1_SPE_C.rsa.priv.pem"
+    },
+    "M4_Info_Flash":
+    {
+        "Image_Type":                  "M4", 
+        "SegID_Value":                     "0",    
+        "Version_Value":                   "0",       
+        "Production_Image_Flag_Value":     "0",       
+        "Encryption_Type":                 "1",
+        "SCGK_path":                        "./GenX_Input_Files/key/ASIC/SCGK_M4_FW.bin",
+        "IV_path":                          "./GenX_Input_Files/parameters/iv_m4_sw.bin", 
+        "Priv_Key_Path":                    "./GenX_Input_Files/key/ASIC/K1_SPE_C.rsa.priv.pem",        
+        "AXICrypto_Key_Path":               "./GenX_Input_Files/axi_crypto/SCGK_AXI_KEY0.bin",
+        "AXICrypto_Nonce_Path":             "./GenX_Input_Files/axi_crypto/nonce0.bin"  
+    },
+    "NPU_C_Info_Host":
+    {
+        "Image_Type":                  "NPU_C", 
+        "SegID_Value":                     "0",    
+        "Version_Value":                   "0",       
+        "Production_Image_Flag_Value":     "0",       
+        "Encryption_Type":                 "0",
+        "SCGK_path":                        "./GenX_Input_Files/key/ASIC/SCGK_NPU_C_FW.bin",
+        "IV_path":                          "./GenX_Input_Files/parameters/iv_npu_c_sw.bin", 
+        "Priv_Key_Path":                    "./GenX_Input_Files/key/ASIC/K1_SPE_C.rsa.priv.pem"
+    },
+    "NPU_C_Info_Flash":
+    {
+        "Image_Type":                  "NPU_C", 
+        "SegID_Value":                     "0",    
+        "Version_Value":                   "0",       
+        "Production_Image_Flag_Value":     "0",       
+        "Encryption_Type":                 "1",
+        "SCGK_path":                        "./GenX_Input_Files/key/ASIC/SCGK_NPU_C_FW.bin",
+        "IV_path":                          "./GenX_Input_Files/parameters/iv_npu_c_sw.bin", 
+        "Priv_Key_Path":                    "./GenX_Input_Files/key/ASIC/K1_SPE_C.rsa.priv.pem",        
+        "AXICrypto_Key_Path":               "./GenX_Input_Files/axi_crypto/SCGK_AXI_KEY0.bin",
+        "AXICrypto_Nonce_Path":             "./GenX_Input_Files/axi_crypto/nonce0.bin"  
+    },
+    "Model_Info_Flash":
+    {
+        "Image_Type":                      "AI_MODEL", 
+        "SegID_Value":                     "0",    
+        "Version_Value":                   "0",       
+        "Production_Image_Flag_Value":     "0",       
+        "Encryption_Type":                 "1",
+        "SCGK_path":                        "./GenX_Input_Files/key/ASIC/SCGK_AI_MODEL.bin",
+        "IV_path":                          "./GenX_Input_Files/parameters/iv_ai_model.bin", 
+        "Priv_Key_Path":                    "./GenX_Input_Files/key/ASIC/K1_SPE_C.rsa.priv.pem",        
+        "AXICrypto_Key_Path":               "./GenX_Input_Files/axi_crypto/SCGK_AXI_KEY0.bin",
+        "AXICrypto_Nonce_Path":             "./GenX_Input_Files/axi_crypto/nonce0.bin"  
+    }
+}
+

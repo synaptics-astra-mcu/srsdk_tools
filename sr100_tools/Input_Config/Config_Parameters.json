@@ -1,0 +1,26 @@
+
+{
+    "ADDR_CONFIGS":
+    {
+        "ATTR_A_OFFSET":                    "00000000",
+        "ATTR_B_OFFSET":                    "00001000",
+        "SPK_IM_ADDR":                      "33EE8000",
+        "APBL_IM_ADDR":                     "33E92D80",        
+        "M55_IM_ADDR_HOST_FULL_0x13":       "33E93000",
+        "M55_IM_ADDR_HOST_HEADER_SIGN_0x12":"33E92D80",
+        "M4_IM_ADDR_HOST_FULL_0x13":        "33E93000",        
+        "M4_IM_ADDR_HOST_HEADER_SIGN_0x12": "33E92D80",   
+        "M4_EXE_BASE_ADDR":                 "34000000",
+        "NPU_C_IM_ADDR_HOST_FULL_0x13":       "33E93000", 
+        "NPU_C_IM_ADDR_HOST_HEADER_SIGN_0x12":"33E92D80", 
+        "NPU_C_EXE_BASE_ADDR":                "34100000"               
+    },
+    "MEMORY_REGIONS":
+    {
+        "ITCM_LOW":                 "10000000",
+        "ITCM_HIGH":                "1001FFFF",
+        "DTCM_LOW":                 "30000000",
+        "DTCM_HIGH":                "3001FFFF",
+        "XSPI_XIP_BASE_ADDRESS":    "3C000000"
+    }   
+}

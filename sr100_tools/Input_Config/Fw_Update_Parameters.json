@@ -1,0 +1,25 @@
+{
+    "FW_Update_FileHeader": 
+    {
+        "magic":            "46696c65",
+        "version":          "00000001",
+        "numImages":        "00000004", 
+        "type_spk":         "00000000",
+        "size_spk":         "FFFFFFFF",
+        "enabled_spk":      "00000001",
+        "offset_spk":       "FFFFFFFF",
+        "type_apbl":        "00000001",
+        "size_apbl":        "FFFFFFFF",
+        "enabled_apbl":     "00000001",
+        "offset_apbl":      "FFFFFFFF",       
+        "type_sdk":         "00000002",
+        "size_sdk":         "FFFFFFFF",
+        "enabled_sdk":      "00000001",
+        "offset_sdk":       "FFFFFFFF",
+        "type_model":       "00000003",        
+        "size_model":       "FFFFFFFF",
+        "enabled_model":    "00000001",
+        "offset_model":     "FFFFFFFF"    
+  }
+}
+
