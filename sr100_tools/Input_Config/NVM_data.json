@@ -90,7 +90,7 @@
         "sw_update_st_fw_update_component_2_st_image_slot_0_slot_address":          "00050000",
         "sw_update_st_fw_update_component_2_st_image_slot_0_image_is_bootable":     "00000001",
         "sw_update_st_fw_update_component_2_st_image_slot_0_image_is_functional":   "00000001",
-        "sw_update_st_fw_update_component_2_st_image_slot_1_slot_address":          "00340000",
+        "sw_update_st_fw_update_component_2_st_image_slot_1_slot_address":          "001c0000",
         "sw_update_st_fw_update_component_2_st_image_slot_1_image_is_bootable":     "00000001",
         "sw_update_st_fw_update_component_2_st_image_slot_1_image_is_functional":   "00000001",
         "sw_update_st_fw_update_component_3_state":                                 "00000000",
